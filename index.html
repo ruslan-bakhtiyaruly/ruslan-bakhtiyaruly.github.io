@@ -220,13 +220,13 @@ a.ca{text-decoration:none}
 .pin:not(.nostack) .jobs::after{content:"";display:block;height:calc(100vh + 200px)}
 .pin:not(.nostack) .stack{margin-top:calc(-48px - 100vh - 200px)}
 /* then the Stack pins and the Contact sheet slides over it, the same way */
-.pin:not(.nostack) .stack > .wrap{position:sticky;top:var(--hdr)}
+.pin:not(.nostack) .stack > .wrap{position:sticky;top:var(--hsafe, var(--hdr))}
 .pin:not(.nostack) .stack::after{content:"";display:block;height:calc(100vh + 120px)}
 .pin:not(.nostack) .talk{position:relative;z-index:4;margin-top:calc(-100vh - 120px);border-radius:48px 48px 0 0;overflow:hidden;box-shadow:0 -44px 90px -40px rgba(0,0,0,.9)}
 .pin:not(.nostack) .talk::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;z-index:6;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,220,190,.24),transparent)}
 .pin .cue{opacity:calc(1 - var(--z,0) * 6)}
 .measuring .job{position:relative!important;top:auto!important}
-.pin .stack{padding-top:calc(var(--hdr) + 48px + clamp(28px, 6vh, 64px))}
+.pin .stack{padding-top:calc(var(--hsafe, var(--hdr)) + 48px + clamp(28px, 6vh, 64px))}
 .pin .line{padding-block:var(--lp, clamp(16px,2.2vw,26px))}
 .pin .talk-stage{display:flex;flex-direction:column;justify-content:center}
 .pin .talk-in{width:100%}
@@ -617,6 +617,8 @@ a.ca{text-decoration:none}
 
   function measure(){
     setModes();
+    /* the fixed header is taller than --hdr on notched phones (safe-area padding); pin things below its real height */
+    root.style.setProperty('--hsafe', Math.round(header.getBoundingClientRect().height) + 'px');
     var pinned = root.classList.contains('pin'), cine = root.classList.contains('cine');
     if (pinned || cine) {
       var vw = root.clientWidth, vh = window.innerHeight;
