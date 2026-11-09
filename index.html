@@ -257,8 +257,10 @@ a.ca{text-decoration:none}
   .pin .job-list li::before{top:.58em}
   /* one-metric cards keep the number tidy on the left rather than stretched across three columns */
   .pin .job:has(.metrics > div:only-child) .metrics{grid-template-columns:minmax(0,1fr)}
-  /* contact rises over the skills sheet as its own rounded panel, mirroring skills-over-experience */
-  .pin .talk{margin-top:-40px;border-radius:40px 40px 0 0;overflow:hidden;z-index:4}
+  /* contact rises over the skills section as its own rounded panel, mirroring skills-over-experience */
+  .pin .stack{padding-bottom:clamp(34px,7vw,56px)}
+  .pin .talk{position:relative;margin-top:-44px;border-radius:44px 44px 0 0;overflow:hidden;z-index:4;box-shadow:0 -34px 70px -28px rgba(0,0,0,.9);transform:translateY(calc((1 - var(--tp,1)) * 76px))}
+  .pin .talk::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;z-index:6;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,220,190,.25),transparent)}
 }
 /* narrowest phones: tighten the densest card further so the deck still fits and stacks */
 @media (max-width:385px){
@@ -581,11 +583,15 @@ a.ca{text-decoration:none}
   });
   function fmt(v, suf){ var r = Math.round(v); return (r < 0 ? '−' + Math.abs(r) : String(r)) + suf; }
 
-  /* smooth wheel scrolling and magnetic hover on mouse devices */
-  var lenis = null;
-  if (window.Lenis && mq('(pointer: fine)')) {
-    try { lenis = new window.Lenis({ autoRaf: true, lerp: 0.085, anchors: { offset: 0 } }); } catch (e) { lenis = null; }
-    document.querySelectorAll('.mag').forEach(function(el){
+  /* smooth scrolling everywhere (incl. touch, so the phone transitions glide), magnetic hover on mouse only */
+  var lenis = null, finePtr = mq('(pointer: fine)');
+  if (window.Lenis) {
+    try {
+      lenis = new window.Lenis(finePtr
+        ? { autoRaf: true, lerp: 0.085, anchors: { offset: 0 } }
+        : { autoRaf: true, lerp: 0.1, syncTouch: true, syncTouchLerp: 0.085, touchInertiaMultiplier: 22, anchors: { offset: 0 } });
+    } catch (e) { lenis = null; }
+    if (lenis && finePtr) document.querySelectorAll('.mag').forEach(function(el){
       /* the pull pauses while a button is held, so selecting text inside a card stays steady */
       var held = false;
       el.addEventListener('pointerdown', function(){ held = true; });
@@ -599,6 +605,7 @@ a.ca{text-decoration:none}
       el.addEventListener('pointerleave', function(){ if (!held) el.style.translate = ''; });
     });
   }
+  window.__lenis = lenis;
 
   var scene = document.querySelector('.scene'), stage = document.querySelector('.stage');
   var photo = document.querySelector('.photo'), photoIn = document.querySelector('.photo-in');
@@ -817,6 +824,12 @@ a.ca{text-decoration:none}
     }
 
     if (pin) reveal(vh); else scrub(vh);
+
+    /* contacts sheet rises over the skills section as it arrives (phones) */
+    if (pin) {
+      var tr = talkEl.getBoundingClientRect();
+      talkEl.style.setProperty('--tp', clamp((vh - tr.top) / (vh * .55), 0, 1).toFixed(4));
+    }
 
     if (pin && !root.classList.contains('nostack')) deck(vh);
     else if (deckOn) {
