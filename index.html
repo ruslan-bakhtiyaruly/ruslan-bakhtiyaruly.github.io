@@ -219,13 +219,18 @@ a.ca{text-decoration:none}
 .pin .job::after{opacity:calc(var(--c,0) * .18)}
 .pin .job + .job{margin-top:26vh}
 /* the deck stays put while the Stack sheet slides over it */
-.pin:not(.nostack) .jobs::after{content:"";display:block;height:calc(100vh + 200px)}
-.pin:not(.nostack) .stack{margin-top:calc(-48px - 100vh - 200px)}
-/* then the Stack pins and the Contact sheet slides over it, the same way */
-.pin:not(.nostack) .stack > .wrap{position:sticky;top:var(--hsafe, var(--hdr))}
-.pin:not(.nostack) .stack::after{content:"";display:block;height:calc(100vh + 120px)}
-.pin:not(.nostack) .talk{position:relative;z-index:4;margin-top:calc(-100vh - 120px);border-radius:48px 48px 0 0;overflow:hidden;box-shadow:0 -44px 90px -40px rgba(0,0,0,.9)}
+.pin:not(.nostack) .jobs::after{content:"";display:block;height:calc(var(--vh, 100vh) + 200px)}
+.pin:not(.nostack) .stack{margin-top:calc(-48px - var(--vh, 100vh) - 200px)}
+/* the Contact sheet is a rounded panel with a lit top edge on every size */
+.pin:not(.nostack) .talk{position:relative;z-index:4;margin-top:-52px;border-radius:44px 44px 0 0;overflow:hidden;box-shadow:0 -40px 80px -36px rgba(0,0,0,.88)}
 .pin:not(.nostack) .talk::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;z-index:6;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,220,190,.24),transparent)}
+/* only where the whole Stack fits one screen (desktop/tablet) do we pin it and let Contact slide fully over it;
+   on phones the Stack is taller than the screen, so it scrolls normally and every skill stays readable */
+@media (min-width:901px){
+  .pin:not(.nostack) .stack > .wrap{position:sticky;top:var(--hsafe, var(--hdr))}
+  .pin:not(.nostack) .stack::after{content:"";display:block;height:calc(var(--vh, 100vh) + 120px)}
+  .pin:not(.nostack) .talk{margin-top:calc(-1 * var(--vh, 100vh) - 172px)}
+}
 .pin .cue{opacity:calc(1 - var(--z,0) * 6)}
 .measuring .job{position:relative!important;top:auto!important}
 .pin .stack{padding-top:calc(var(--hsafe, var(--hdr)) + 48px + clamp(28px, 6vh, 64px))}
@@ -264,7 +269,6 @@ a.ca{text-decoration:none}
   .pin .job-list li::before{top:.58em}
   /* one-metric cards keep the number tidy on the left rather than stretched across three columns */
   .pin .job:has(.metrics > div:only-child) .metrics{grid-template-columns:minmax(0,1fr)}
-  .pin .talk{border-radius:40px 40px 0 0}
 }
 /* narrowest phones: tighten the densest card further so the deck still fits and stacks */
 @media (max-width:385px){
@@ -608,6 +612,7 @@ a.ca{text-decoration:none}
     });
   }
   window.__lenis = lenis;
+  window.__stops = function(){ return stops.map(function(s){ return s.id + ':' + s.y; }); };
 
   var scene = document.querySelector('.scene'), stage = document.querySelector('.stage');
   var photo = document.querySelector('.photo'), photoIn = document.querySelector('.photo-in');
@@ -619,6 +624,9 @@ a.ca{text-decoration:none}
     setModes();
     /* the fixed header is taller than --hdr on notched phones (safe-area padding); pin things below its real height */
     root.style.setProperty('--hsafe', Math.round(header.getBoundingClientRect().height) + 'px');
+    /* the section curtains must use the same viewport height the stops do, so the overlap stays exact on
+       mobile browsers where CSS 100vh (large) differs from the visible window.innerHeight */
+    root.style.setProperty('--vh', window.innerHeight + 'px');
     var pinned = root.classList.contains('pin'), cine = root.classList.contains('cine');
     if (pinned || cine) {
       var vw = root.clientWidth, vh = window.innerHeight;
@@ -673,7 +681,7 @@ a.ca{text-decoration:none}
      With a mouse or trackpad the page moves between fixed stops instead of following the wheel:
      any scroll, however light, plays the whole next scene and lands where it is fully readable. */
   var fine = mq('(pointer: fine)');
-  var stops = [], busy = false, safety = 0, run = 0, wheelAt = -1e9, acc = 0, used = false, hist = [], low = Infinity;
+  var stops = [], busy = false, safety = 0, run = 0, wheelAt = -1e9, acc = 0, used = false, hist = [], low = Infinity, targetIdx = -1;
   var expHead = expEl.querySelector('.sec-head'), stackHead = stackEl.querySelector('.sec-head'), talkHead = talkEl.querySelector('.sec-head');
   var lines = Array.prototype.slice.call(document.querySelectorAll('.line'));
   var talkStage = talkEl.querySelector('.talk-stage');
@@ -732,7 +740,7 @@ a.ca{text-decoration:none}
 
   function sineInOut(t){ return -(Math.cos(Math.PI * t) - 1) / 2; }
   function here(){ return lenis ? lenis.scroll : (window.scrollY || root.scrollTop); }
-  function release(){ busy = false; clearTimeout(safety); }
+  function release(){ busy = false; targetIdx = -1; clearTimeout(safety); }
   function glide(y, cap){
     var vh = window.innerHeight, from = here(), d = Math.abs(y - from);
     if (d < 2) return;
@@ -750,10 +758,16 @@ a.ca{text-decoration:none}
       if (p < 1) requestAnimationFrame(frame); else { root.style.scrollBehavior = ''; release(); }
     })(t0);
   }
-  function go(dir){
-    var y = here(), i;
-    if (dir > 0) { for (i = 0; i < stops.length; i++) if (stops[i].y > y + 4) return glide(stops[i].y); }
-    else { for (i = stops.length - 1; i >= 0; i--) if (stops[i].y < y - 4) return glide(stops[i].y); }
+  function curIdx(){ var y = here(), best = 0, bd = Infinity, i; for (i = 0; i < stops.length; i++) { var d = Math.abs(stops[i].y - y); if (d < bd) { bd = d; best = i; } } return best; }
+  /* count > 1 jumps several scenes at once (a hard flick); successive gestures queue off the last target */
+  function go(dir, count){
+    if (stops.length < 2) return;
+    count = Math.max(1, count || 1);
+    var base = (busy && targetIdx >= 0) ? targetIdx : curIdx();
+    var ni = Math.max(0, Math.min(stops.length - 1, base + dir * count));
+    if (ni === base) return;
+    targetIdx = ni;
+    glide(stops[ni].y);
   }
 
   /* a gesture is one burst of wheel events: it ends after a short pause, or when a trackpad's
@@ -770,40 +784,50 @@ a.ca{text-decoration:none}
     if (now - wheelAt > 220) { hist.length = 0; used = false; acc = 0; low = Infinity; }
     wheelAt = now;
     if (!used) {
-      if (busy) return;
       acc += dy;
       if (Math.abs(acc) < 6) return;
       used = true; hist.length = 0; low = Infinity;
-      go(acc > 0 ? 1 : -1);
+      /* a hard, fast push jumps more than one scene at once */
+      var count = Math.abs(dy) > 90 ? 3 : Math.abs(dy) > 40 ? 2 : 1;
+      go(acc > 0 ? 1 : -1, count);
       return;
     }
     /* the same stream after a step: it has to fade (inertia) and then clearly push again,
-       e.g. a fresh swipe over the tail of the last one, to count as a new gesture */
+       e.g. a fresh swipe over the tail of the last one, to count as a new gesture — these queue up */
     hist.push(Math.abs(dy));
     if (hist.length > 8) hist.shift();
     var n = hist.length, level = mean(hist, n - 4, n);
     if (n >= 4) low = Math.min(low, level);
-    if (!busy && n >= 6 && level >= 6 && level >= low * 3 + 4) { hist.length = 0; low = Infinity; go(dy > 0 ? 1 : -1); }
+    if (n >= 6 && level >= 6 && level >= low * 3 + 4) { hist.length = 0; low = Infinity; go(dy > 0 ? 1 : -1, level > 90 ? 2 : 1); }
   }, { passive: false, capture: true });
 
-  /* touch: one swipe plays the next scene, the same as one wheel gesture on a mouse */
-  var tY = 0, tX = 0, tUsed = false, tActive = false, tLock = false;
+  /* touch: one swipe plays the next scene; a hard/long flick plays several, and quick repeats queue up */
+  var tY = 0, tX = 0, tLastY = 0, tLastT = 0, tUsed = false, tActive = false, tLock = false, tAnchor = 0;
   window.addEventListener('touchstart', function(e){
     tActive = stepOn() && e.touches.length === 1;
     if (!tActive) return;
     tUsed = false; tLock = false;
-    tY = e.touches[0].clientY; tX = e.touches[0].clientX;
+    tY = tLastY = e.touches[0].clientY; tX = e.touches[0].clientX; tLastT = e.timeStamp || performance.now();
   }, { passive: true });
   window.addEventListener('touchmove', function(e){
     if (!tActive || !stepOn()) return;
-    var dy = tY - e.touches[0].clientY, dx = tX - e.touches[0].clientX;
+    var cy = e.touches[0].clientY, dyTot = tY - cy, dx = tX - e.touches[0].clientX;
     /* ignore clearly horizontal drags (let them be), otherwise this gesture owns the scroll */
-    if (!tLock) { if (Math.abs(dx) > Math.abs(dy) + 6) { tActive = false; return; } if (Math.abs(dy) > 6) tLock = true; }
+    if (!tLock) { if (Math.abs(dx) > Math.abs(dyTot) + 6) { tActive = false; return; } if (Math.abs(dyTot) > 6) tLock = true; }
     if (e.cancelable) e.preventDefault();
-    if (tUsed || busy) return;
-    if (Math.abs(dy) < 26) return;
-    tUsed = true;
-    go(dy > 0 ? 1 : -1);
+    var now = e.timeStamp || performance.now();
+    var vy = tLastY - cy, vdt = Math.max(1, now - tLastT), speed = Math.abs(vy) / vdt;
+    tLastY = cy; tLastT = now;
+    var dir = dyTot > 0 ? 1 : -1;
+    if (!tUsed) {
+      if (Math.abs(dyTot) < 26) return;
+      tUsed = true; tAnchor = Math.abs(dyTot);
+      var count = speed > 2.2 ? 4 : speed > 1.4 ? 3 : speed > 0.85 ? 2 : 1;
+      go(dir, count);
+      return;
+    }
+    /* a long, continuing drag keeps advancing a scene for every stretch of travel */
+    if (Math.abs(dyTot) - tAnchor > 80) { tAnchor = Math.abs(dyTot); go(dir, speed > 1.4 ? 2 : 1); }
   }, { passive: false });
   window.addEventListener('touchend', function(){ tActive = false; }, { passive: true });
 
