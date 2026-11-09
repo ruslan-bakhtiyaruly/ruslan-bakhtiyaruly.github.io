@@ -254,6 +254,22 @@ a.ca{text-decoration:none}
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
 
+/* ---------- narrow / touch: the hero plays as a scroll-linked scene too (native scroll, no snapping) ---------- */
+.cine .scene{height:260vh}
+.cine .stage{position:sticky;top:0;height:100vh;overflow:hidden}
+.cine .hero{position:absolute;inset:0;min-height:0}
+.cine .photo-in{transform:translate3d(calc(var(--z,0) * var(--dx,0px)), calc(var(--z,0) * var(--dy,0px)), 0) scale(calc(1 + var(--z,0) * (var(--k,6) - 1)));filter:blur(calc(var(--z,0) * 5px))}
+.cine .photo::before{opacity:calc(1 - var(--z,0) * 1.5)}
+.cine .ring{opacity:calc(1 - var(--z,0) * 2.5)}
+.cine .name .l1{transform:translate3d(calc(var(--z,0) * -32vw),0,0);opacity:calc(1 - var(--z,0) * 1.4)}
+.cine .name .l2{transform:translate3d(calc(var(--z,0) * 32vw),0,0);opacity:calc(1 - var(--z,0) * 1.4)}
+.cine .badge,.cine .role{opacity:calc(1 - var(--z,0) * 2.4)}
+.cine .cue{opacity:calc(1 - var(--z,0) * 6)}
+.cine .veil{display:block;position:absolute;inset:0;z-index:3;background:var(--lilac);opacity:var(--veil,0);pointer-events:none}
+.cine .about{position:absolute;inset:0;z-index:4;display:flex;align-items:center;padding-block:calc(var(--hdr) + 10px) 18px;background:transparent;border-radius:0;opacity:var(--ao,0)}
+.cine .about > .wrap{width:100%}
+.cine .mf{margin-top:0;font-size:clamp(21px,5.6vw,34px);line-height:1.26}
+
 /* ---------- print / PDF ---------- */
 @page{size:A4;margin:0}
 @media print{
@@ -474,7 +490,7 @@ a.ca{text-decoration:none}
   function headerState(){
     header.classList.toggle('is-solid', (window.scrollY || root.scrollTop) > 8);
     var mid = 36, light = false;
-    var pinned = root.classList.contains('pin');
+    var pinned = root.classList.contains('pin') || root.classList.contains('cine');
     if (pinned) {
       var veil = parseFloat(stageEl.style.getPropertyValue('--veil')) || 0, str = stageEl.getBoundingClientRect();
       if (veil > .5 && str.bottom > mid) light = true;
@@ -496,7 +512,10 @@ a.ca{text-decoration:none}
   if (!fx) { window.addEventListener('scroll', headerState, { passive: true }); headerState(); return; }
   root.classList.add('fx');
   function setModes(){
-    root.classList.toggle('pin', mq('(min-width: 901px) and (min-height: 640px)'));
+    var pinned = mq('(min-width: 901px) and (min-height: 640px)');
+    root.classList.toggle('pin', pinned);
+    /* narrow / touch screens play the hero as a scroll-linked scene too, but without gesture snapping */
+    root.classList.toggle('cine', !pinned && mq('(min-height: 600px)'));
   }
   setModes();
 
@@ -550,13 +569,16 @@ a.ca{text-decoration:none}
 
   function measure(){
     setModes();
-    if (root.classList.contains('pin')) {
+    var pinned = root.classList.contains('pin'), cine = root.classList.contains('cine');
+    if (pinned || cine) {
       var vw = root.clientWidth, vh = window.innerHeight;
       var sr = stage.getBoundingClientRect(), r = photo.getBoundingClientRect();
       var cx = r.left - sr.left + r.width / 2, cy = r.top - sr.top + r.height / 2;
       photoIn.style.setProperty('--dx', (vw / 2 - cx).toFixed(1) + 'px');
       photoIn.style.setProperty('--dy', (vh / 2 - cy).toFixed(1) + 'px');
       photoIn.style.setProperty('--k', (Math.sqrt(vw * vw + vh * vh) / Math.max(1, r.width) * 1.04).toFixed(3));
+    }
+    if (pinned) {
       var room = window.innerHeight - 12;
       var tooTall = jobs.some(function(j, i){ return j.offsetHeight > room - (hdr + 24 + i * 22); });
       root.classList.toggle('nostack', tooTall);
@@ -740,10 +762,10 @@ a.ca{text-decoration:none}
   var ticking = false;
   function update(){
     ticking = false;
-    var vh = window.innerHeight, pin = root.classList.contains('pin');
+    var vh = window.innerHeight, pin = root.classList.contains('pin'), cine = root.classList.contains('cine');
 
     var sr = scene.getBoundingClientRect(), span = sr.height - vh;
-    if (pin && span > 1) {
+    if ((pin || cine) && span > 1) {
       var s = clamp(-sr.top / span, 0, 1);
       var z = ease(clamp(s / .3, 0, 1));
       stage.style.setProperty('--z', z.toFixed(4));
