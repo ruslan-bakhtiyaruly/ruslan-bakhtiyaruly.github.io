@@ -98,10 +98,10 @@ a{color:inherit}
 .hero-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(30% 40% at 50% 36%, rgba(255,170,110,.24), rgba(255,170,110,0) 70%), radial-gradient(26% 30% at 58% 48%, rgba(185,176,255,.14), rgba(185,176,255,0) 70%)}
 .hero-in{position:relative;width:100%;container-type:inline-size;display:flex;flex-direction:column;align-items:center;text-align:center}
 .hero .hero-in{max-width:1600px}
-.cue{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.42);pointer-events:none}
-.cue i{display:block;width:1px;height:34px;background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,0));transform-origin:top;animation:cue 2.4s ease-in-out infinite}
+.cue{margin:clamp(18px,3vh,32px) 0 0;display:flex;flex-direction:column;align-items:center;gap:9px;font-family:var(--mono);font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.46);pointer-events:none}
+.cue i{display:block;width:1px;height:30px;background:linear-gradient(rgba(255,255,255,.6),rgba(255,255,255,0));transform-origin:top;animation:cue 2.4s ease-in-out infinite}
 @keyframes cue{0%{transform:scaleY(0);opacity:1}55%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
-@media (max-height:700px){.cue{display:none}}
+@media (max-height:640px){.cue{display:none}}
 .badge{display:inline-flex;align-items:center;gap:10px;margin:0;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--hair);font-size:14px;color:rgba(255,255,255,.88)}
 .badge i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(61,220,132,.18)}
 .photo{position:relative;z-index:2;margin-top:clamp(18px,3.2vh,30px);width:clamp(140px,26vh,260px);aspect-ratio:1}
@@ -389,6 +389,7 @@ a.ca{text-decoration:none}
         </div>
         <h1 class="name dsp"><span class="l1">Ruslan</span><span class="l2">Bakhtiyaruly</span></h1>
         <p class="role"><span>L2 Support Specialist</span><i aria-hidden="true"></i><span>Fintech &amp; payments</span></p>
+        <div class="cue" aria-hidden="true"><span>Scroll down</span><i></i></div>
         <ul class="pcontacts">
           <li><span>Telegram</span><a href="https://t.me/Ilasdz">@Ilasdz</a></li>
           <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/ruslan-bakhtiyaruly/">in/ruslan-bakhtiyaruly</a></li>
@@ -396,7 +397,6 @@ a.ca{text-decoration:none}
           <li><span>Phone / WhatsApp</span><a href="https://wa.me/77066578399">+7 706 657 8399</a></li>
         </ul>
       </div>
-      <div class="cue" aria-hidden="true"><span>Scroll</span><i></i></div>
     </div>
     <div class="veil" aria-hidden="true"></div>
     <div class="about">
