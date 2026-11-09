@@ -219,6 +219,11 @@ a.ca{text-decoration:none}
 /* the deck stays put while the Stack sheet slides over it */
 .pin:not(.nostack) .jobs::after{content:"";display:block;height:calc(100vh + 200px)}
 .pin:not(.nostack) .stack{margin-top:calc(-48px - 100vh - 200px)}
+/* then the Stack pins and the Contact sheet slides over it, the same way */
+.pin:not(.nostack) .stack > .wrap{position:sticky;top:var(--hdr)}
+.pin:not(.nostack) .stack::after{content:"";display:block;height:calc(100vh + 120px)}
+.pin:not(.nostack) .talk{position:relative;z-index:4;margin-top:calc(-100vh - 120px);border-radius:48px 48px 0 0;overflow:hidden;box-shadow:0 -44px 90px -40px rgba(0,0,0,.9)}
+.pin:not(.nostack) .talk::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;z-index:6;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,220,190,.24),transparent)}
 .pin .cue{opacity:calc(1 - var(--z,0) * 6)}
 .measuring .job{position:relative!important;top:auto!important}
 .pin .stack{padding-top:calc(var(--hdr) + 48px + clamp(28px, 6vh, 64px))}
@@ -257,10 +262,7 @@ a.ca{text-decoration:none}
   .pin .job-list li::before{top:.58em}
   /* one-metric cards keep the number tidy on the left rather than stretched across three columns */
   .pin .job:has(.metrics > div:only-child) .metrics{grid-template-columns:minmax(0,1fr)}
-  /* contact rises over the skills section as its own rounded panel, mirroring skills-over-experience */
-  .pin .stack{padding-bottom:clamp(34px,7vw,56px)}
-  .pin .talk{position:relative;margin-top:-44px;border-radius:44px 44px 0 0;overflow:hidden;z-index:4;box-shadow:0 -34px 70px -28px rgba(0,0,0,.9);transform:translateY(calc((1 - var(--tp,1)) * 76px))}
-  .pin .talk::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;z-index:6;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,220,190,.25),transparent)}
+  .pin .talk{border-radius:40px 40px 0 0}
 }
 /* narrowest phones: tighten the densest card further so the deck still fits and stacks */
 @media (max-width:385px){
@@ -824,12 +826,6 @@ a.ca{text-decoration:none}
     }
 
     if (pin) reveal(vh); else scrub(vh);
-
-    /* contacts sheet rises over the skills section as it arrives (phones) */
-    if (pin) {
-      var tr = talkEl.getBoundingClientRect();
-      talkEl.style.setProperty('--tp', clamp((vh - tr.top) / (vh * .55), 0, 1).toFixed(4));
-    }
 
     if (pin && !root.classList.contains('nostack')) deck(vh);
     else if (deckOn) {
