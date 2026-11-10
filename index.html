@@ -833,12 +833,16 @@ a.ca{text-decoration:none}
 
   function softEase(t){ return 1 - Math.pow(1 - Math.pow(t, 1.5), 3); }
   function outEase(t){ return 1 - Math.pow(1 - t, 2.6); }
+  /* under a finger the same scenes play slower and symmetrically: a gentle start, a gentle landing */
+  function sineInOut(t){ return -(Math.cos(Math.PI * t) - 1) / 2; }
+  function softOut(t){ return 1 - Math.pow(1 - t, 1.9); }
   function here(){ return lenis ? lenis.scroll : (window.scrollY || root.scrollTop); }
   function release(){ busy = false; targetIdx = -1; clearTimeout(safety); }
-  function glide(y, cap){
+  function glide(y, cap, soft){
     var vh = window.innerHeight, from = here(), d = Math.abs(y - from);
     if (d < 2) return;
-    var dur = clamp(.8 + d / vh * .38, .95, cap || 1.7), easing = busy ? outEase : softEase;
+    var dur = soft ? clamp(.85 + d / vh * .4, 1.05, cap || 1.9) : clamp(.8 + d / vh * .38, .95, cap || 1.7);
+    var easing = soft ? (busy ? softOut : sineInOut) : (busy ? outEase : softEase);
     busy = true;
     clearTimeout(safety);
     safety = setTimeout(release, dur * 1000 + 500);
@@ -854,14 +858,14 @@ a.ca{text-decoration:none}
   }
   function curIdx(){ var y = here(), best = 0, bd = Infinity, i; for (i = 0; i < stops.length; i++) { var d = Math.abs(stops[i].y - y); if (d < bd) { bd = d; best = i; } } return best; }
   /* count > 1 jumps several scenes at once (a hard flick); successive gestures queue off the last target */
-  function go(dir, count){
+  function go(dir, count, soft){
     if (stops.length < 2) return;
     count = Math.max(1, count || 1);
     var base = (busy && targetIdx >= 0) ? targetIdx : curIdx();
     var ni = Math.max(0, Math.min(stops.length - 1, base + dir * count));
     if (ni === base) return;
     targetIdx = ni;
-    glide(stops[ni].y);
+    glide(stops[ni].y, 0, soft);
   }
 
   /* a gesture is one burst of wheel events: it ends after a short pause, or when a trackpad's
@@ -895,13 +899,15 @@ a.ca{text-decoration:none}
     if (n >= 6 && level >= 6 && level >= low * 3 + 4) { hist.length = 0; low = Infinity; go(dy > 0 ? 1 : -1, level > 90 ? 2 : 1); }
   }, { passive: false, capture: true });
 
-  /* touch: one swipe plays the next scene; a hard/long flick plays several, and quick repeats queue up */
-  var tY = 0, tX = 0, tLastY = 0, tLastT = 0, tUsed = false, tActive = false, tLock = false, tAnchor = 0;
+  /* touch: one swipe, long or short, plays exactly one scene. Only a sharp flick (judged by the speed
+     of the finger as it leaves the screen) adds more scenes, and quick repeated swipes queue up */
+  var tY = 0, tX = 0, tUsed = false, tActive = false, tLock = false, tDir = 0, tTrail = [];
   window.addEventListener('touchstart', function(e){
     tActive = stepOn() && e.touches.length === 1;
     if (!tActive) return;
-    tUsed = false; tLock = false;
-    tY = tLastY = e.touches[0].clientY; tX = e.touches[0].clientX; tLastT = e.timeStamp || performance.now();
+    tUsed = false; tLock = false; tDir = 0;
+    tY = e.touches[0].clientY; tX = e.touches[0].clientX;
+    tTrail = [[e.timeStamp || performance.now(), tY]];
   }, { passive: true });
   window.addEventListener('touchmove', function(e){
     if (!tActive || !stepOn()) return;
@@ -909,21 +915,22 @@ a.ca{text-decoration:none}
     /* ignore clearly horizontal drags (let them be), otherwise this gesture owns the scroll */
     if (!tLock) { if (Math.abs(dx) > Math.abs(dyTot) + 6) { tActive = false; return; } if (Math.abs(dyTot) > 6) tLock = true; }
     if (e.cancelable) e.preventDefault();
-    var now = e.timeStamp || performance.now();
-    var vy = tLastY - cy, vdt = Math.max(1, now - tLastT), speed = Math.abs(vy) / vdt;
-    tLastY = cy; tLastT = now;
-    var dir = dyTot > 0 ? 1 : -1;
-    if (!tUsed) {
-      if (Math.abs(dyTot) < 26) return;
-      tUsed = true; tAnchor = Math.abs(dyTot);
-      var count = speed > 2.2 ? 4 : speed > 1.4 ? 3 : speed > 0.85 ? 2 : 1;
-      go(dir, count);
-      return;
-    }
-    /* a long, continuing drag keeps advancing a scene for every stretch of travel */
-    if (Math.abs(dyTot) - tAnchor > 80) { tAnchor = Math.abs(dyTot); go(dir, speed > 1.4 ? 2 : 1); }
+    tTrail.push([e.timeStamp || performance.now(), cy]);
+    if (tTrail.length > 12) tTrail.shift();
+    if (!tUsed && Math.abs(dyTot) >= 26) { tUsed = true; tDir = dyTot > 0 ? 1 : -1; go(tDir, 1, true); }
   }, { passive: false });
-  window.addEventListener('touchend', function(){ tActive = false; }, { passive: true });
+  window.addEventListener('touchend', function(e){
+    if (tActive && tUsed && tTrail.length > 1) {
+      /* finger speed over its last ~100 ms on the glass, px per ms, in the direction of the swipe */
+      var last = tTrail[tTrail.length - 1], i = tTrail.length - 2;
+      while (i > 0 && last[0] - tTrail[i][0] < 100) i--;
+      var dt = Math.max(1, last[0] - tTrail[i][0]), v = (tTrail[i][1] - last[1]) / dt * tDir;
+      var extra = v > 3.6 ? 3 : v > 2.7 ? 2 : v > 1.8 ? 1 : 0;
+      if (extra) go(tDir, extra, true);
+    }
+    tActive = false;
+  }, { passive: true });
+  window.addEventListener('touchcancel', function(){ tActive = false; }, { passive: true });
 
   window.addEventListener('keydown', function(e){
     if (!stepOn() || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
