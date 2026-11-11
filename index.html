@@ -205,6 +205,7 @@ a{color:inherit}
 .lk{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5)}
 .lv{margin:0;font-size:clamp(19px,2vw,28px);font-weight:500;letter-spacing:-.015em;line-height:1.35;color:rgba(255,255,255,.92)}
 .lv span{transition:color .25s}
+@media (min-width:901px){.lv span{white-space:nowrap}}
 .lv span:hover{color:var(--amber)}
 .lv i{display:inline-block;width:.2em;height:.2em;margin:0 .45em;border-radius:50%;background:var(--amber);opacity:.75;vertical-align:.24em}
 .lv small{font-size:.62em;font-weight:500;color:rgba(255,255,255,.5);letter-spacing:0}
@@ -255,7 +256,7 @@ a.ca{text-decoration:none}
 .fx .sec-head .ln > span{transform:translate3d(0, calc((1 - var(--e,1)) * 108%), 0)}
 .fx .sec-head .kicker{opacity:calc(.2 + var(--e,1) * .8)}
 .pin .jobs{display:block}
-.pin .job{position:sticky;top:calc(var(--hdr) + 24px + var(--i,0) * 22px);transform:scale(var(--s,1));box-shadow:0 50px 100px -60px rgba(20,20,60,calc(.55 * max(0, 1 - var(--c,0) * 2)))}
+.pin .job{position:sticky;top:var(--st, calc(var(--hdr) + 24px + var(--i,0) * 22px));transform:scale(var(--s,1));box-shadow:0 50px 100px -60px rgba(20,20,60,calc(.55 * max(0, 1 - var(--c,0) * 2)))}
 .pin .job--dark{box-shadow:0 50px 100px -50px rgba(0,0,0,calc(.6 * max(0, 1 - var(--c,0) * 2)))}
 .pin .job > *{opacity:calc(1 - var(--c,0))}
 .pin .job::after{opacity:calc(var(--c,0) * .18)}
@@ -285,7 +286,7 @@ a.ca{text-decoration:none}
 .pin.nostack .job > *{opacity:1}
 .pin.nostack .job::after{opacity:0}
 .pin.nostack .job + .job{margin-top:18px}
-@media (max-height:760px){
+@media (max-height:880px){
   .pin .job{padding:28px 36px}
   .pin .job-body{margin-top:18px;padding-top:18px}
   .pin .metrics{gap:12px}
@@ -461,7 +462,7 @@ a.ca{text-decoration:none}
     <div class="about">
       <div class="wrap">
         <p class="kicker">About</p>
-        <p class="mf"><em>When a payment fails, I find out why.</em> I trace the incident from the first client message to the root cause and explain the fix to the client and to the developers. Before that I worked in customer support and retention, so I know the client's side of the story.</p>
+        <p class="mf"><em>When a payment fails, I find out why.</em> I work at the intersection of the client, the provider and the system. I analyze logs, API requests and transaction data, reconcile operations with providers and pinpoint the root cause of failures. I can explain technical details in plain language, so the solution is clear to both the client and the team.</p>
       </div>
     </div>
   </div>
@@ -477,47 +478,51 @@ a.ca{text-decoration:none}
     <div class="jobs">
       <article class="job job--dark" style="--i:0" data-scroll>
         <div class="job-head">
-          <div class="job-top"><span>Jan 2025 – now</span><span class="now">Current</span></div>
+          <div class="job-top"><span>Jan 2026 – Present</span><span class="now">Current</span></div>
           <h3 class="job-title dsp">L2 Support Specialist</h3>
           <p class="job-co">Vertex Cards / APIC World</p>
         </div>
         <div class="job-body">
           <dl class="metrics">
-            <div><dt>client companies in monthly settlement reports</dt><dd><span data-count="280" data-suffix="+">280+</span></dd></div>
+            <div><dt>client companies in monthly finance reporting</dt><dd><span data-count="280" data-suffix="+">280+</span></dd></div>
             <div><dt>card providers reconciled</dt><dd><span data-count="13">13</span></dd></div>
             <div><dt>BINs documented</dt><dd><span data-count="21">21</span></dd></div>
           </dl>
           <ul class="job-list">
-            <li>Investigate card transaction incidents end to end: raw logs, failed workflows and decline reasons</li>
-            <li>Reconcile transaction data across providers and produce the monthly settlement reports</li>
-            <li>Build data exports for card balances, fees, provider settlements and company-level totals</li>
-            <li>Audit and document BIN settings, tariff structures and provider aliases in the knowledge base</li>
-            <li>Map company, account, card and provider links for compliance checks, balance audits and client escalations</li>
+            <li>Conduct end-to-end investigations of card transaction incidents, from the client's first message to the root cause. Analyze declines, cancellations, KYC failures and card issuance errors using Back Office data, Grafana logs and provider responses.</li>
+            <li>Reconcile transactions with 13 card providers and prepare monthly reporting for the finance team across 280+ client companies.</li>
+            <li>Identify the causes of balance and fee discrepancies: recalculate operations by status, authorization and fee, and prepare clear statements and explanations for clients.</li>
+            <li>Own the connection of new BINs and the launch of new clients: provider, tariff, access rights and account setup, plus onboarding on card operations and the client portal.</li>
+            <li>Detect compromised cards and card-testing activity, and prepare recommendations on blocking and reissue.</li>
+            <li>Maintain BIN documentation and develop and update procedures in Confluence.</li>
           </ul>
         </div>
       </article>
 
       <article class="job" style="--i:1" data-scroll>
         <div class="job-head">
-          <div class="job-top"><span>May 2023 – Aug 2024 · Remote</span><span>1 yr 4 mos</span></div>
-          <h3 class="job-title dsp">Customer Support Specialist</h3>
-          <p class="job-co">PIN-UP GLOBAL</p>
+          <div class="job-top"><span>May 2023 – Dec 2025</span><span>2 yrs 8 mos</span></div>
+          <h3 class="job-title dsp">VIP Manager</h3>
+          <p class="job-co">Confidential Company (NDA)</p>
         </div>
         <div class="job-body">
           <dl class="metrics">
-            <div><dt>repeat inquiries after I introduced structured response templates</dt><dd><span data-count="-20" data-suffix="%">−20%</span></dd></div>
+            <div><dt>VIP players in my portfolio</dt><dd><span data-count="100" data-prefix="~">~100</span></dd></div>
+            <div><dt>dormant VIP accounts reactivated</dt><dd><span data-count="120" data-prefix="~">~120</span></dd></div>
           </dl>
           <ul class="job-list">
-            <li>Handled player inquiries and disputes end to end, including complex and sensitive cases</li>
-            <li>Identified at-risk players and supported retention with tailored solutions</li>
-            <li>Worked with the CRM and KYC teams every day and took part in reactivation campaigns</li>
+            <li>Managed a portfolio of around 100 VIP players, responsible for retention and activity growth.</li>
+            <li>Reactivated around 120 dormant VIP accounts over the course of the role through personalised outreach.</li>
+            <li>Analysed GGR, player behaviour and regional preferences to build tailored bonus offers.</li>
+            <li>Contributed to the development and launch of promotions for my player pool.</li>
+            <li>Resolved payment incidents related to deposits and withdrawals, and coordinated complex cases with the KYC, Antifraud and L2 teams.</li>
           </ul>
         </div>
       </article>
 
       <article class="job job--dark" style="--i:2" data-scroll>
         <div class="job-head">
-          <div class="job-top"><span>Dec 2022 – May 2023 · Almaty</span><span>6 mos</span></div>
+          <div class="job-top"><span>Dec 2021 – May 2023 · Almaty</span><span>1 yr 6 mos</span></div>
           <h3 class="job-title dsp">Customer Support Shift Lead</h3>
           <p class="job-co">Freedom Finance Global PLC</p>
         </div>
@@ -525,12 +530,13 @@ a.ca{text-decoration:none}
           <dl class="metrics">
             <div><dt>average handle time</dt><dd><span data-count="-25" data-suffix="%">−25%</span></dd></div>
             <div><dt>client satisfaction</dt><dd>82%<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="to"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></svg><span data-count="91" data-from="82" data-suffix="%">91%</span></dd></div>
-            <div><dt>support agents on the team</dt><dd><span data-count="5">5</span></dd></div>
+            <div><dt>support specialists on the team</dt><dd><span data-count="5">5</span></dd></div>
           </dl>
           <ul class="job-list">
-            <li>Led the shift team and introduced templates and workflows for common requests</li>
-            <li>Rebuilt the internal knowledge base so clients had fewer reasons to write again</li>
-            <li>Ran training sessions and onboarding for new hires</li>
+            <li>Led a team of 5 support specialists; introduced templates and workflows that cut average handle time by 25%.</li>
+            <li>Raised client satisfaction from 82% to 91%.</li>
+            <li>Rebuilt the internal knowledge base, reducing repeat client contacts.</li>
+            <li>Ran training and onboarding for new hires.</li>
           </ul>
         </div>
       </article>
@@ -546,12 +552,11 @@ a.ca{text-decoration:none}
     </header>
     <div class="lines">
       <div class="line" data-scroll><span class="lk">Data</span><p class="lv"><span>PostgreSQL</span><i></i><span>DBeaver</span><i></i><span>Google Sheets</span><i></i><span>Excel</span></p></div>
-      <div class="line" data-scroll><span class="lk">SQL</span><p class="lv"><span>Joins</span><i></i><span>Aggregations</span><i></i><span>Subqueries</span><i></i><span>CTEs</span></p></div>
-      <div class="line" data-scroll><span class="lk">Logs &amp; workflows</span><p class="lv"><span>Grafana</span><i></i><span>VictoriaLogs <small>LogsQL</small></span><i></i><span>Temporal</span></p></div>
-      <div class="line" data-scroll><span class="lk">Operations</span><p class="lv"><span>Backoffice</span><i></i><span>Jira</span><i></i><span>Confluence</span><i></i><span>ClickUp</span><i></i><span>Slack</span></p></div>
-      <div class="line" data-scroll><span class="lk">Support</span><p class="lv"><span>SoftSwiss</span><i></i><span>LiveChat</span><i></i><span>Zendesk</span></p></div>
-      <div class="line" data-scroll><span class="lk">Domain</span><p class="lv"><span>Card lifecycle</span><i></i><span>Authorization &amp; settlement</span><i></i><span>MCC codes</span><i></i><span>KYC/AML</span></p></div>
-      <div class="line" data-scroll><span class="lk">Languages</span><p class="lv"><span>Russian <small>native</small></span><i></i><span>English <small>professional working proficiency</small></span></p></div>
+      <div class="line" data-scroll><span class="lk">Logs</span><p class="lv"><span>Grafana</span><i></i><span>VictoriaLogs</span></p></div>
+      <div class="line" data-scroll><span class="lk">Operations</span><p class="lv"><span>Backoffice</span><i></i><span>Postman</span><i></i><span>Swagger</span><i></i><span>Jira</span><i></i><span>Confluence</span><i></i><span>ClickUp</span><i></i><span>Slack</span></p></div>
+      <div class="line" data-scroll><span class="lk">Support</span><p class="lv"><span>SoftSwiss</span><i></i><span>Intercom</span><i></i><span>Zendesk</span><i></i><span>LiveChat</span></p></div>
+      <div class="line" data-scroll><span class="lk">Domain</span><p class="lv"><span>Card lifecycle</span><i></i><span>Authorization &amp; settlement</span><i></i><span>MCC codes</span><i></i><span>KYC</span><i></i><span>Root cause analysis</span></p></div>
+      <div class="line" data-scroll><span class="lk">Languages</span><p class="lv"><span>Russian <small>native</small></span><i></i><span>English <small>Upper-Intermediate (B2)</small></span></p></div>
       <div class="line" data-scroll><span class="lk">Education</span><p class="lv"><span>Bachelor of Finance, Economics &amp; Banking</span> <small>University of International Business, Almaty · 2019–2022</small></p></div>
     </div>
   </div>
@@ -640,7 +645,7 @@ a.ca{text-decoration:none}
 
   /* numbers that count up as their panel arrives */
   var counters = Array.prototype.slice.call(document.querySelectorAll('[data-count]')).map(function(el){
-    return { el: el, to: +el.getAttribute('data-count'), from: +(el.getAttribute('data-from') || 0), suf: el.getAttribute('data-suffix') || '', host: el.closest('[data-scroll]'), last: null };
+    return { el: el, to: +el.getAttribute('data-count'), from: +(el.getAttribute('data-from') || 0), suf: el.getAttribute('data-suffix') || '', pre: el.getAttribute('data-prefix') || '', host: el.closest('[data-scroll]'), last: null };
   });
   function fmt(v, suf){ var r = Math.round(v); return (r < 0 ? '−' + Math.abs(r) : String(r)) + suf; }
 
@@ -716,8 +721,14 @@ a.ca{text-decoration:none}
       photoIn.style.setProperty('--k', (Math.sqrt(vw * vw + vh * vh) / Math.max(1, r.width) * 1.04).toFixed(3));
     }
     if (pinned) {
-      var room = window.innerHeight - 12;
-      var tooTall = jobs.some(function(j, i){ return j.offsetHeight > room - (hdr + 24 + i * 22); });
+      /* a card taller than the room still joins the deck: it scrolls until its last line is on screen and
+         holds there (pinned by its bottom edge). Only a card longer than two screens switches the deck off */
+      var room = window.innerHeight - 12, tooTall = false;
+      jobs.forEach(function(j, i){
+        var norm = hdr + 24 + i * 22, h = j.offsetHeight;
+        j.style.setProperty('--st', Math.min(norm, room - h) + 'px');
+        if (h > (room - norm) * 2) tooTall = true;
+      });
       root.classList.toggle('nostack', tooTall);
     } else {
       root.classList.remove('nostack');
@@ -731,14 +742,15 @@ a.ca{text-decoration:none}
   var deckOn = false;
   function deck(vh){
     deckOn = true;
-    var n = jobs.length, last = n - 1, tops = [], hs = [], a = [], i, k;
+    var n = jobs.length, last = n - 1, tops = [], hs = [], a = [], norm = [], i, k;
     for (i = 0; i < n; i++) {
       tops[i] = jobs[i].getBoundingClientRect().top;
       hs[i] = jobs[i].offsetHeight;
+      norm[i] = hdr + 24 + i * 22;
       /* 0 when this card starts to overlap the one behind it, 1 when it has settled on the deck */
-      a[i] = i ? clamp(1 - (tops[i] - (hdr + 24 + i * 22)) / Math.max(160, hs[i - 1] - 22), 0, 1) : 0;
+      a[i] = i ? clamp(1 - (tops[i] - norm[i]) / Math.max(160, Math.min(hs[i - 1], vh - 12 - norm[i - 1]) - 22), 0, 1) : 0;
     }
-    var deckTop = hdr + 24, deckBottom = hdr + 24 + last * 22 + hs[last];
+    var deckTop = hdr + 24, deckBottom = Math.min(norm[last], vh - 12 - hs[last]) + hs[last];
     var q = clamp((deckBottom - stackEl.getBoundingClientRect().top) / (deckBottom - deckTop), 0, 1);
     var front = null; /* visible bottom edge of the card directly in front */
     for (i = last; i >= 0; i--) {
@@ -747,12 +759,14 @@ a.ca{text-decoration:none}
       var s = 1 - depth * .035 - q * .03;
       var c = i === last ? q * .5 : Math.min(1, depth);
       var cut = 0, bottom = tops[i] + hs[i] * s;
-      if (front !== null && bottom > front - 24) cut = Math.min(hs[i] - 48, (bottom - (front - 24)) / s);
+      /* a tall card sits higher than its step of the deck: once covered, its top is trimmed down to that step */
+      var need = norm[i] - tops[i], tcut = need > 0 ? need * Math.min(1, depth) / s : 0;
+      if (front !== null && bottom > front - 24) cut = Math.min(hs[i] - tcut - 48, (bottom - (front - 24)) / s);
       front = tops[i] + (hs[i] - cut) * s;
       var st = jobs[i].style;
       st.setProperty('--s', s.toFixed(4));
       st.setProperty('--c', c.toFixed(4));
-      st.clipPath = cut > .5 ? 'inset(0 0 ' + cut.toFixed(1) + 'px 0 round 32px)' : '';
+      st.clipPath = (cut > .5 || tcut > .5) ? 'inset(' + tcut.toFixed(1) + 'px 0 ' + Math.max(0, cut).toFixed(1) + 'px 0 round 32px)' : '';
     }
   }
 
@@ -801,8 +815,15 @@ a.ca{text-decoration:none}
     var flow = jobs.map(function(j){ var t = top(j); return [t, t + j.offsetHeight]; });
     flow.forEach(function(f, i){
       if (i === 0 && f[1] - ex <= vh - 16) return;                          /* already in full view under the heading */
-      add(f[0] - (hdr + 24 + (stacked ? i * 22 : 0)));
-      if (!stacked && f[1] - f[0] > vh - hdr - 48) add(f[1] + 24 - vh);
+      var topStop = f[0] - (hdr + 24 + (stacked ? i * 22 : 0));
+      if (!stacked) { add(topStop); if (f[1] - f[0] > vh - hdr - 48) add(f[1] + 24 - vh); return; }
+      var botStop = f[1] + 12 - vh;                                         /* last line on screen: here a tall card holds */
+      if (botStop - topStop <= 4) { add(topStop); return; }
+      /* a tall card: skip its top stop when the difference is slight, or when the Experience stop already
+         showed everything the bottom stop leaves under the header */
+      var seen = i === 0 ? vh - (f[0] - ex) : 0, hidden = hdr - (f[0] - botStop);
+      if (botStop - topStop < 40 || seen >= hidden + 24) add(botStop);
+      else { add(topStop); add(botStop); }
     });
     /* the finale fills the screen, so its stop is simply the end of the page */
     var fits = talkEl.offsetHeight <= vh + 1;
@@ -996,7 +1017,7 @@ a.ca{text-decoration:none}
   /* pinned layout: things animate in on their own clock as they arrive (elements arriving together
      cascade), so whatever screen the page comes to rest on is complete */
   var counting = false;
-  function show(n, v){ var txt = fmt(v, n.suf); if (txt !== n.last) { n.el.textContent = txt; n.last = txt; } }
+  function show(n, v){ var txt = n.pre + fmt(v, n.suf); if (txt !== n.last) { n.el.textContent = txt; n.last = txt; } }
   function countLoop(){
     var now = performance.now(), more = false;
     counters.forEach(function(n){
