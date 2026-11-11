@@ -164,8 +164,8 @@ a{color:inherit}
 .job--dark{--glow:255,160,100;--edge:rgba(255,255,255,.11)}
 .job::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;box-shadow:inset 0 1px 0 var(--edge);background:radial-gradient(560px circle at var(--px,50%) var(--py,0%), rgba(var(--glow),calc(.17 * var(--po,0))), rgba(var(--glow),0) 62%), radial-gradient(60% 70% at 92% -12%, rgba(var(--glow),.12), rgba(var(--glow),0) 70%)}
 @media (hover:hover){
-  .job,.crow{transition:--po .5s ease}
-  .job:hover,.crow:hover{--po:1}
+  .job,.crow,.wcard{transition:--po .5s ease}
+  .job:hover,.crow:hover,.wcard:hover{--po:1}
 }
 .job::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#000;opacity:0;pointer-events:none}
 .job-top{display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
@@ -211,7 +211,19 @@ a{color:inherit}
 .lv small{font-size:.62em;font-weight:500;color:rgba(255,255,255,.5);letter-spacing:0}
 @media (max-width:700px){.line{grid-template-columns:minmax(0,1fr);gap:8px}}
 
-/* ---------- scene 4: contact ---------- */
+/* ---------- scene 4: why me — a lilac sheet between the black Stack and the graphite Contact ---------- */
+.why{position:relative;z-index:3;background:var(--lilac);color:var(--ink);padding-block:clamp(80px,10vw,130px)}
+.why > .wrap{position:relative;width:100%}
+.why .kicker{color:rgba(12,12,16,.62)}
+.wgrid{margin-top:clamp(30px,4.6vw,56px);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.wcard{--glow:150,140,255;position:relative;isolation:isolate;background:#fff;border-radius:28px;padding:clamp(22px,2.6vw,36px);box-shadow:0 44px 90px -64px rgba(20,20,60,.55)}
+.wcard::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;background:radial-gradient(460px circle at var(--px,50%) var(--py,0%), rgba(var(--glow),calc(.2 * var(--po,0))), rgba(var(--glow),0) 62%), radial-gradient(70% 80% at 96% -14%, rgba(255,170,110,.14), rgba(255,170,110,0) 70%)}
+.wn{display:block;font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.16em;color:var(--copper)}
+.wt{margin:14px 0 0;font-weight:700;font-size:clamp(20px,2vw,28px);line-height:1.15;letter-spacing:-.02em;text-wrap:balance}
+.wd{margin:10px 0 0;font-size:clamp(15px,1.25vw,17px);line-height:1.55;color:#2a2b33;text-wrap:pretty}
+@media (max-width:820px){.wgrid{grid-template-columns:minmax(0,1fr);gap:12px}}
+
+/* ---------- scene 5: contact ---------- */
 .talk{position:relative;z-index:3;background:var(--graphite)}
 .talk-stage{position:relative;overflow:hidden;padding-block:clamp(90px,11vw,140px) clamp(64px,8vw,100px)}
 .talk-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(55% 46% at 50% 48%, rgba(255,205,170,.30), rgba(255,205,170,0) 70%), radial-gradient(36% 32% at 62% 56%, rgba(185,176,255,.18), rgba(185,176,255,0) 70%);animation:aurora 19s ease-in-out infinite reverse;will-change:transform}
@@ -267,15 +279,26 @@ a.ca{text-decoration:none}
 /* the Stack scrolls until its last row is on screen, then holds (pinned by its bottom edge) while the
    Contact sheet, a rounded panel with a lit top edge, slides over it and the Stack sinks back */
 .pin:not(.nostack) .stack{position:sticky;top:calc(var(--vh, 100vh) - var(--sh, 100vh));min-height:calc(var(--vh, 100vh) + 48px);padding-bottom:40px}
-.pin:not(.nostack) .stack > .wrap{transform-origin:50% 100%;transform:translate3d(0, calc(var(--tq,0) * -7vh), 0) scale(calc(1 - var(--tq,0) * .045));opacity:calc(1 - var(--tq,0) * .8)}
-.measuring .stack{position:relative!important;top:auto!important}
-.pin:not(.nostack) .talk{position:relative;z-index:4;border-radius:44px 44px 0 0;overflow:hidden;box-shadow:0 -40px 80px -36px rgba(0,0,0,.88)}
+.pin:not(.nostack) .why{position:sticky;top:calc(var(--vh, 100vh) - var(--wh, 100vh));z-index:4;min-height:var(--vh, 100vh);display:flex;flex-direction:column;justify-content:center;border-radius:44px 44px 0 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.95), 0 -40px 80px -36px rgba(0,0,0,.7)}
+.pin:not(.nostack) .stack > .wrap,.pin:not(.nostack) .why > .wrap{transform-origin:50% 100%;transform:translate3d(0, calc(var(--tq,0) * -7vh), 0) scale(calc(1 - var(--tq,0) * .045));opacity:calc(1 - var(--tq,0) * .8)}
+.measuring .stack,.measuring .why{position:relative!important;top:auto!important}
+.pin:not(.nostack) .talk{position:relative;z-index:5;border-radius:44px 44px 0 0;overflow:hidden;box-shadow:0 -40px 80px -36px rgba(0,0,0,calc(.8 * var(--sq,0)))}
 .pin:not(.nostack) .talk::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;z-index:6;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,220,190,.24),transparent)}
 .pin .cue{opacity:calc(1 - var(--z,0) * 6)}
 .measuring .job{position:relative!important;top:auto!important}
 .pin .stack{padding-top:calc(var(--hsafe, var(--hdr)) + 48px + var(--sg, clamp(28px, 6vh, 64px)))}
 .pin .line{padding-block:var(--lp, clamp(16px,2.2vw,26px))}
 .pin .lines{margin-top:var(--lm, clamp(40px,6vw,72px))}
+.pin .why{padding-block:calc(var(--hsafe, var(--hdr)) + clamp(18px,4.6vh,56px)) clamp(18px,3.4vh,40px)}
+.pin .wgrid{margin-top:clamp(18px,4.2vh,52px);gap:clamp(10px,1.8vh,16px)}
+.pin .wcard{padding:clamp(16px,3.2vh,36px) clamp(18px,2.6vw,36px)}
+.pin .wt{margin-top:clamp(8px,1.6vh,14px)}
+@media (max-width:820px){
+  .pin .wcard{border-radius:22px;box-shadow:0 26px 50px -40px rgba(20,20,60,.4)}
+  .pin .wn{font-size:11px}
+  .pin .wt{font-size:19px}
+  .pin .wd{margin-top:6px;font-size:14px;line-height:1.45}
+}
 .pin .talk-stage{display:flex;flex-direction:column;justify-content:center;padding-block:calc(var(--hsafe, var(--hdr)) + 16px) 24px}
 @media (max-width:720px){
   .pin .cgrid{margin-top:28px;gap:10px}
@@ -332,6 +355,7 @@ a.ca{text-decoration:none}
 .fx:not(.pin) .job{transform:translate3d(0, calc((1 - var(--e,1)) * 60px), 0)}
 .fx .line .lv{transform:translate3d(calc((1 - var(--e,1)) * 6vw),0,0);opacity:calc(.12 + var(--e,1) * .88)}
 .fx .line::before{transform:scaleX(var(--e,1))}
+.fx:not(.pin) .wcard{transform:translate3d(0, calc((1 - var(--e,1)) * 40px), 0);opacity:calc(.2 + var(--e,1) * .8)}
 .fx .cgrid .crow{--t:clamp(0, calc(var(--e,1) * 1.4 - var(--j,0) * .12), 1);transform:translate3d(0, calc((1 - var(--t)) * 36px), 0);opacity:calc(.15 + var(--t) * .85)}
 /* pinned layout: reveals run on their own clock once an element arrives, so a screen at rest is always complete */
 .pin .sec-head .ln > span{transform:translate3d(0,108%,0);transition:transform 1s cubic-bezier(.2,.75,.15,1) var(--d,0ms)}
@@ -346,6 +370,8 @@ a.ca{text-decoration:none}
 .pin .cgrid:not(.in) .crow::after{animation:none}
 .pin .cgrid .crow{transform:translate3d(0,36px,0);opacity:.15;transition:transform .9s cubic-bezier(.2,.75,.15,1) calc(var(--d,0ms) + var(--j,0) * 90ms), opacity .9s ease calc(var(--d,0ms) + var(--j,0) * 90ms), background-color .3s, border-color .3s, translate .45s cubic-bezier(.2,.7,.2,1)}
 .pin .cgrid.in .crow{transform:none;opacity:1}
+.pin .wcard{transform:translate3d(0,36px,0);opacity:.15;transition:transform .9s cubic-bezier(.2,.75,.15,1) var(--d,0ms), opacity .9s ease var(--d,0ms), --po .5s ease}
+.pin .wcard.in{transform:none;opacity:1}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
@@ -372,7 +398,7 @@ a.ca{text-decoration:none}
   html,body{background:var(--black)}
   body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   *,*::before,*::after{animation:none!important;transition:none!important}
-  body::after,.top,.ring,.veil,.cue,.talk,.hero::before,.about::before,.job::before,.stack::before,.line::before{display:none!important}
+  body::after,.top,.ring,.veil,.cue,.talk,.why,.hero::before,.about::before,.job::before,.stack::before,.line::before{display:none!important}
   .name span,.job--dark .metrics dd span{background:none!important;-webkit-text-fill-color:currentColor!important}
   .photo,.name{translate:none!important}
   .stack{position:relative!important;top:auto!important;min-height:0!important;box-shadow:none!important}
@@ -431,6 +457,7 @@ a.ca{text-decoration:none}
     <nav class="nav" aria-label="Sections">
       <a class="link" href="#experience">Experience</a>
       <a class="link" href="#stack">Stack</a>
+      <a class="link" href="#why">Why me</a>
       <a class="pill mag" href="#contact">Contact</a>
     </nav>
   </div>
@@ -562,6 +589,21 @@ a.ca{text-decoration:none}
   </div>
 </section>
 
+<section class="why" id="why">
+  <div class="wrap">
+    <header class="sec-head" data-scroll>
+      <p class="kicker">Why me</p>
+      <h2 class="h-xl dsp"><span class="ln"><span>What I bring</span></span></h2>
+    </header>
+    <div class="wgrid">
+      <article class="wcard" data-scroll><span class="wn">01</span><h3 class="wt">I get to the root cause.</h3><p class="wd">I don't pass a problem along. I find out what happened and close it so it doesn't come back.</p></article>
+      <article class="wcard" data-scroll><span class="wn">02</span><h3 class="wt">I understand both sides.</h3><p class="wd">My background in support and client work helps me explain technical causes in a way both the client and the team can follow.</p></article>
+      <article class="wcard" data-scroll><span class="wn">03</span><h3 class="wt">I work with data and numbers.</h3><p class="wd">I reconcile, recalculate and spot discrepancies, then present the result as clear reporting.</p></article>
+      <article class="wcard" data-scroll><span class="wn">04</span><h3 class="wt">I get up to speed fast.</h3><p class="wd">I've worked in banking, fintech and other industries, so I pick up a product and its processes quickly.</p></article>
+    </div>
+  </div>
+</section>
+
 <section class="talk" id="contact">
   <div class="talk-pin">
     <div class="talk-stage">
@@ -590,7 +632,7 @@ a.ca{text-decoration:none}
   var header = document.querySelector('.top');
   function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
 
-  var aboutEl = document.querySelector('.about'), expEl = document.querySelector('.exp'), stageEl = document.querySelector('.stage'), stackEl = document.querySelector('.stack'), talkEl = document.querySelector('.talk');
+  var aboutEl = document.querySelector('.about'), expEl = document.querySelector('.exp'), stageEl = document.querySelector('.stage'), stackEl = document.querySelector('.stack'), whyEl = document.querySelector('.why'), talkEl = document.querySelector('.talk');
   var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav .link')), navOn = null;
   function headerState(){
     header.classList.toggle('is-solid', (window.scrollY || root.scrollTop) > 8);
@@ -603,11 +645,11 @@ a.ca{text-decoration:none}
       var ab = aboutEl.getBoundingClientRect();
       if (ab.top <= mid && ab.bottom > mid) light = true;
     }
-    var kt = stackEl.getBoundingClientRect().top, xt = expEl.getBoundingClientRect().top;
-    if (xt <= mid && kt > mid) light = true;
+    var kt = stackEl.getBoundingClientRect().top, xt = expEl.getBoundingClientRect().top, wt = whyEl.getBoundingClientRect().top, tt = talkEl.getBoundingClientRect().top;
+    if ((xt <= mid && kt > mid) || (wt <= mid && tt > mid)) light = true;
     header.classList.toggle('is-light', light);
     /* the section on screen is marked in the nav */
-    var line = window.innerHeight * .4, on = talkEl.getBoundingClientRect().top <= line ? '#contact' : kt <= line ? '#stack' : xt <= line ? '#experience' : '';
+    var line = window.innerHeight * .4, on = tt <= line ? '#contact' : wt <= line ? '#why' : kt <= line ? '#stack' : xt <= line ? '#experience' : '';
     if (on !== navOn) {
       navOn = on;
       navLinks.forEach(function(a){ a.classList.toggle('is-on', a.getAttribute('href') === on); });
@@ -687,7 +729,7 @@ a.ca{text-decoration:none}
       if (!heroEl.classList.contains('lit')) { heroEl.classList.add('lit'); heroEl.getBoundingClientRect(); heroEl.style.setProperty('--mo', '1'); }
       if (!ptrRaf) ptrRaf = requestAnimationFrame(ptrLoop);
     }, { passive: true });
-    document.querySelectorAll('.job, .crow').forEach(function(el){
+    document.querySelectorAll('.job, .crow, .wcard').forEach(function(el){
       el.addEventListener('pointermove', function(e){
         var r = el.getBoundingClientRect();
         el.style.setProperty('--px', Math.round(e.clientX - r.left) + 'px');
@@ -775,7 +817,7 @@ a.ca{text-decoration:none}
      any scroll, however light, plays the whole next scene and lands where it is fully readable. */
   var fine = mq('(pointer: fine)');
   var stops = [], busy = false, safety = 0, run = 0, wheelAt = -1e9, acc = 0, used = false, hist = [], low = Infinity, targetIdx = -1;
-  var expHead = expEl.querySelector('.sec-head'), stackHead = stackEl.querySelector('.sec-head'), talkHead = talkEl.querySelector('.sec-head');
+  var expHead = expEl.querySelector('.sec-head'), stackHead = stackEl.querySelector('.sec-head'), whyHead = whyEl.querySelector('.sec-head'), talkHead = talkEl.querySelector('.sec-head');
   var lines = Array.prototype.slice.call(document.querySelectorAll('.line'));
   var talkStage = talkEl.querySelector('.talk-stage'), linesEl = stackEl.querySelector('.lines');
   function stepOn(){ return stops.length > 1 && root.classList.contains('pin'); }
@@ -827,18 +869,23 @@ a.ca{text-decoration:none}
     });
     /* the finale fills the screen, so its stop is simply the end of the page */
     var fits = talkEl.offsetHeight <= vh + 1;
-    var sH = stackEl.offsetHeight;
-    root.style.setProperty('--sh', sH + 'px');
-    var st = top(stackEl) + 48, sh = top(stackHead), c = fits ? max : Math.min(max, top(talkHead) - (hdr + g));
-    var end = top(stackEl) + sH - vh;                                       /* last row on screen: here the stack holds */
-    if (end - st > 8) {
-      if (end - st < vh * .2 && end <= sh - hdr - 8) st = end;              /* nearly fits: settle a little lower */
-      else {
-        var parts = Math.max(1, Math.ceil((end - st) / (vh - hdr - 60)));
-        for (var pi = 1; pi <= parts; pi++) add(st + (end - st) * pi / parts);
+    var c = fits ? max : Math.min(max, top(talkHead) - (hdr + g));
+    /* a sheet that holds by its bottom edge while the next one slides over it: its first stop shows its top,
+       its last one its last line (one and the same when it fits the screen) */
+    function sheet(el, head, lead, id, prop){
+      var H = el.offsetHeight, t = top(el), s0 = t + lead, end = t + H - vh;
+      root.style.setProperty(prop, H + 'px');
+      if (end - s0 > 8) {
+        if (end - s0 < vh * .2 && end <= top(head) - hdr - 8) s0 = end;      /* nearly fits: settle a little lower */
+        else {
+          var parts = Math.max(1, Math.ceil((end - s0) / (vh - hdr - 60)));
+          for (var pi = 1; pi <= parts; pi++) add(s0 + (end - s0) * pi / parts);
+        }
       }
+      add(s0, id);
     }
-    add(st, 'stack');
+    sheet(stackEl, stackHead, 48, 'stack', '--sh');
+    sheet(whyEl, whyHead, 0, 'why', '--wh');
     add(c, 'contact');
     if (!fits) add(max);
     root.classList.remove('measuring');
@@ -1000,8 +1047,14 @@ a.ca{text-decoration:none}
 
     var sy = window.scrollY || root.scrollTop, smax = root.scrollHeight - vh;
     header.style.setProperty('--p', (smax > 0 ? clamp(sy / smax, 0, 1) : 0).toFixed(4));
-    if (pin) stackEl.style.setProperty('--tq', clamp((vh - talkEl.getBoundingClientRect().top) / vh, 0, 1).toFixed(4));
-    else stackEl.style.removeProperty('--tq');
+    if (pin) {
+      /* how far each sheet is covered by the next one */
+      stackEl.style.setProperty('--tq', clamp((vh - whyEl.getBoundingClientRect().top) / vh, 0, 1).toFixed(4));
+      var tq = clamp((vh - talkEl.getBoundingClientRect().top) / vh, 0, 1);
+      whyEl.style.setProperty('--tq', tq.toFixed(4));
+      /* the Contact sheet only casts its shadow once it is on its way up, so nothing darkens the light sheet at rest */
+      talkEl.style.setProperty('--sq', clamp(tq * 6, 0, 1).toFixed(3));
+    } else { stackEl.style.removeProperty('--tq'); whyEl.style.removeProperty('--tq'); }
 
     if (pin) reveal(vh); else scrub(vh);
 
