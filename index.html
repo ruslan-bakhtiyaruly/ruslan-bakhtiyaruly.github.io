@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Ruslan Bakhtiyaruly — L2 Support Specialist · Fintech &amp; Card Payments</title>
-<meta name="description" content="Ruslan Bakhtiyaruly, L2 Support Specialist in fintech and card payments: incident investigation, root cause analysis, SQL, Grafana, payments operations and reconciliation.">
+<title>Ruslan Bakhtiyaruly — Payment Operations · Reconciliation · L2 Support</title>
+<meta name="description" content="Ruslan Bakhtiyaruly, L2 Support Specialist in fintech and card payments: incident investigation, root cause analysis, SQL, Grafana, payments operations and reconciliation. Open to Payment Operations, Reconciliation and L2 Support roles.">
 <meta name="author" content="Ruslan Bakhtiyaruly">
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="profile">
 <meta property="og:site_name" content="Ruslan Bakhtiyaruly">
-<meta property="og:title" content="Ruslan Bakhtiyaruly — L2 Support Specialist">
+<meta property="og:title" content="Ruslan Bakhtiyaruly — Payment Operations · Reconciliation · L2 Support">
 <meta property="og:description" content="When a payment fails, I find out why. L2 support for card issuing and payments: incident investigation, SQL, Grafana, reconciliation.">
 <meta property="og:url" content="https://ruslan-bakhtiyaruly.github.io/">
 <meta property="og:image" content="https://ruslan-bakhtiyaruly.github.io/og.jpg">
@@ -136,9 +136,15 @@ a{color:inherit}
 }
 .role{margin:clamp(16px,2.6vh,26px) 0 0;font-size:clamp(17px,1.7vw,22px);font-weight:500;letter-spacing:.005em;color:rgba(255,255,255,.86)}
 .role i{display:inline-block;width:5px;height:5px;margin:0 .75em;border-radius:50%;background:var(--amber);vertical-align:middle}
+/* phones: the first two roles share a line, the third sits under its own dot */
 @media (max-width:480px){
+  .role{font-size:16px}
+  .role i.br{display:block;margin:8px auto}
+  .role i.br + span{display:block}
+}
+@media (max-width:340px){
   .role span{display:block}
-  .role i{display:block;margin:8px auto}
+  .role i{display:block;margin:7px auto}
 }
 .pcontacts{display:none}
 
@@ -475,7 +481,7 @@ a.ca{text-decoration:none}
           <div class="photo-in"><img src="photo.jpg" alt="Portrait of Ruslan Bakhtiyaruly" width="378" height="378"></div>
         </div>
         <h1 class="name dsp"><span class="l1">Ruslan</span><span class="l2">Bakhtiyaruly</span></h1>
-        <p class="role"><span>L2 Support Specialist</span><i aria-hidden="true"></i><span>Fintech &amp; payments</span></p>
+        <p class="role"><span>Payment Operations</span><i aria-hidden="true"></i><span>Reconciliation</span><i class="br" aria-hidden="true"></i><span>L2 Support</span></p>
         <div class="cue" aria-hidden="true"><span>Scroll down</span><i></i></div>
         <ul class="pcontacts">
           <li><span>Telegram</span><a href="https://t.me/Ilasdz">@Ilasdz</a></li>
