@@ -255,6 +255,11 @@ a.ca{text-decoration:none}
 .ca{transition:background-color .2s, color .2s}
 .ca:hover{background:rgba(255,255,255,.2)}
 .cv{justify-self:start;cursor:text;-webkit-user-select:all;user-select:all}
+/* a small download pill under the contact cards, in the same key as the Contact button in the header */
+.dl{display:inline-flex;align-items:center;gap:9px;margin-top:clamp(16px,3vh,28px);min-height:40px;padding:0 18px 0 15px;border-radius:999px;font:600 13.5px/1 var(--sans);color:#fff;text-decoration:none;border:1px solid transparent;background:linear-gradient(#17181c,#17181c) padding-box, linear-gradient(275deg, var(--amber-hi) -30%, var(--copper) 95%) border-box;transition:box-shadow .3s, translate .45s cubic-bezier(.2,.7,.2,1)}
+.dl:hover{box-shadow:0 0 24px -6px rgba(255,154,77,.7)}
+.dl svg{width:15px;height:15px;color:var(--amber)}
+.dl small{margin-left:1px;font:500 10.5px/1 var(--mono);letter-spacing:.14em;color:rgba(255,255,255,.5)}
 
 /* ---------- motion, only when .fx is on ---------- */
 .pin .scene{height:380vh}
@@ -307,8 +312,9 @@ a.ca{text-decoration:none}
 }
 .pin .talk-stage{display:flex;flex-direction:column;justify-content:center;padding-block:calc(var(--hsafe, var(--hdr)) + 16px) 24px}
 @media (max-width:720px){
-  .pin .cgrid{margin-top:28px;gap:10px}
-  .pin .crow{padding:16px 18px}
+  .pin .cgrid{margin-top:22px;gap:8px}
+  .pin .crow{padding:13px 16px}
+  .pin .dl{margin-top:14px;min-height:38px}
 }
 .pin .talk-in{width:100%}
 .pin.nostack .job{position:relative;top:auto;transform:none;clip-path:none}
@@ -376,6 +382,8 @@ a.ca{text-decoration:none}
 .pin .cgrid:not(.in) .crow::after{animation:none}
 .pin .cgrid .crow{transform:translate3d(0,36px,0);opacity:.15;transition:transform .9s cubic-bezier(.2,.75,.15,1) calc(var(--d,0ms) + var(--j,0) * 90ms), opacity .9s ease calc(var(--d,0ms) + var(--j,0) * 90ms), background-color .3s, border-color .3s, translate .45s cubic-bezier(.2,.7,.2,1)}
 .pin .cgrid.in .crow{transform:none;opacity:1}
+.pin .dl{opacity:0;transform:translate3d(0,18px,0);transition:opacity .8s ease .5s, transform .9s cubic-bezier(.2,.75,.15,1) .5s, box-shadow .3s, translate .45s cubic-bezier(.2,.7,.2,1)}
+.pin .cgrid.in + .dl{opacity:1;transform:none}
 .pin .wcard{transform:translate3d(0,36px,0);opacity:.15;transition:transform .9s cubic-bezier(.2,.75,.15,1) var(--d,0ms), opacity .9s ease var(--d,0ms), --po .5s ease}
 .pin .wcard.in{transform:none;opacity:1}
 @media (prefers-reduced-motion: reduce){
@@ -623,6 +631,7 @@ a.ca{text-decoration:none}
           <div class="crow mag" style="--j:2"><span class="ck">Telegram</span><span class="cv">@Ilasdz</span><a class="ca" href="https://t.me/Ilasdz" target="_blank" rel="noopener" aria-label="Open Telegram">Open<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></div>
           <div class="crow mag" style="--j:3"><span class="ck">Phone / WhatsApp</span><span class="cv">+7 706 657 8399</span><a class="ca" href="https://wa.me/77066578399" target="_blank" rel="noopener" aria-label="Open a WhatsApp chat">Open<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></a></div>
         </div>
+        <a class="dl mag" href="https://ruslan-bakhtiyaruly.github.io/Ruslan_Bakhtiyaruly_CV.pdf" download="Ruslan_Bakhtiyaruly_CV.pdf" target="_blank" rel="noopener" aria-label="Download CV as PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 11 5 5 5-5"/><path d="M5 20h14"/></svg>Download CV<small>PDF</small></a>
       </div>
     </div>
   </div>
